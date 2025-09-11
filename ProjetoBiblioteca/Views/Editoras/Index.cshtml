@@ -1,0 +1,41 @@
+﻿@model IEnumerable<ProjetoBiblioteca.Models.Editoras>
+
+<link href="~/css/listas.css" rel="stylesheet" />
+
+<h2>Editoras</h2>
+<table class="tbl">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Criado em</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            @foreach (var editora in Model)
+            {
+                <td>@editora.Nome</td>
+                <td>@editora.CriadoEm</td>
+                <td>
+                    <div class="acoes">
+                        <form asp-action="Editar" method="get">
+                            <input type="hidden" name="id" value="@editora.Id" />
+                            <button type="submit" class="btn btn-editar">Editar</button>
+                        </form>
+
+                        <form asp-action="Excluir" method="post" onsubmit="return confirm('Excluir esta editora?');">
+                            @Html.AntiForgeryToken()
+
+                            <input type="hidden" name="id" value="@editora.Id" />
+                            <button type="submit" class="btn btn-excluir">Excluir</button>
+                        </form>
+                    </div>
+                </td>
+            }
+        </tr>
+    </tbody>
+</table>
+<br />
+<br />
+<a asp-action="Criar" class="btnLink">Adicionar editora</a>

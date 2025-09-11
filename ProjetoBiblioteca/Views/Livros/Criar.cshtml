@@ -1,0 +1,56 @@
+﻿@model ProjetoBiblioteca.Models.Livros
+@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    ViewData["Title"] = "Novo Livro";
+
+}
+
+<h2>Novo Livro</h2>
+<link href="~/css/cadastro.css" rel="stylesheet" />
+
+
+<form asp-action="Criar" method="post">
+
+    @Html.AntiForgeryToken()
+    <section>
+        <div>
+            <label>Título</label><input asp-for="Titulo" required />
+        </div>
+
+        <div>
+            <label>Autor</label>
+            <select asp-for="AutorId" asp-items="ViewBag.Autores">
+                <option value="">(Selecione)</option>
+            </select>
+        </div>
+        <div>
+            <label>Editora</label>
+            <select asp-for="EditoraId" asp-items="ViewBag.Editoras">
+                <option value="">(Selecione)</option>
+            </select>
+        </div>
+        <div>
+            <label>Gênero</label>
+            <select asp-for="GeneroId" asp-items="ViewBag.Generos">
+                <option value="">(Selecione)</option>
+            </select>
+        </div>
+
+        <div>
+            <label>Ano</label>
+            <input asp-for="Ano" type="number" />
+        </div>
+        <div>
+            <label>ISBN</label>
+            <input asp-for="Isbn" />
+        </div>
+
+        <div>
+            <label>Quantidade total</label>
+            <input asp-for="QuantidadeTotal" type="number" min="1" value="1" required />
+        </div>
+    </section>
+    <button type="submit" class="btn btn-primary">Salvar</button>
+</form> 

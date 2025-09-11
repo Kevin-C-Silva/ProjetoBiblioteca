@@ -1,0 +1,57 @@
+﻿@model IEnumerable<ProjetoBiblioteca.Models.Usuarios>
+
+@{
+    var usuarios = ViewBag.Usuario;
+}
+<link href="~/css/listas.css" rel="stylesheet" />
+
+<h2>Usuários</h2>
+
+<table class="tbl">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Função</th>
+            <th>Ativo</th> <!--Se o usuário está ativo ou não, podendo ser 0, caso não esteja ativo ou 1, caso esteja ativo (como em um bool)-->
+            <th>Criado em</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var usuario in Model)
+        {
+            <tr>
+                <td>@usuario.Nome</td>
+                <td>@usuario.Email</td>
+                <td>@usuario.Role</td>
+                @if (usuario.Ativo == 1)
+                {
+                    <td>Sim</td>
+                }
+                else
+                {
+                    <td>Não</td>
+                }
+                <td>@usuario.CriadoEm</td>
+                <td>
+                    <div class="acoes">
+                        <form asp-action="Editar" method="get">
+                            <input type="hidden" name="id" value="@usuario.Id" />
+                            <button type="submit" class="btn btn-editar">Editar</button>
+                        </form>
+                        <form asp-action="Excluir" method="post" onsubmit="return confirm('Excluir este livro?');">
+                            @Html.AntiForgeryToken()
+
+                            <input type="hidden" name="id" value="@usuario.Id" />
+                            <button type="submit" class="btn btn-excluir">Excluir</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<br />
+<br />
+<a asp-action="CriarUsuario" class="btnLink">Cadastrar Usuário</a>

@@ -1,0 +1,68 @@
+﻿@model IEnumerable<ProjetoBiblioteca.Models.Livros>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Livros";
+
+    var autores = ViewBag.Autores;
+    var editoras = ViewBag.Editoras;
+    var generos = ViewBag.Generos;
+}
+
+<h2>Livros</h2>
+<link href="~/css/listas.css" rel="stylesheet" />
+
+@if (TempData["ok"] != null)
+{
+    <div class="ok">@TempData["ok"]</div>
+}
+
+<table class="tbl">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Título</th>
+            <th>Autor</th>
+            <th>Editora</th>
+            <th>Gênero</th>
+            <th>Ano</th>
+            <th>ISBN</th>
+            <th>Total</th>
+            <th>Disp.</th>
+            <th class="col-acoes">Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var l in Model)
+        {
+            <tr>
+                <td>@l.Id</td>
+                <td>@l.Titulo</td>
+                <td>@(l.Autor ?? "-")</td>
+                <td>@(l.Editora ?? "-")</td>
+                <td>@(l.Genero ?? "-")</td>
+                <td>@(l.Ano?.ToString() ?? "-")</td>
+                <td>@(string.IsNullOrWhiteSpace(l.Isbn) ? "-" : l.Isbn)</td>
+                <td>@l.QuantidadeTotal</td>
+                <td>@l.QuantidadeDisponivel</td>
+                <td>
+                    <div class="acoes">
+                        <form asp-action="Editar" method="get">
+                            <input type="hidden" name="id" value="@l.Id" />
+                            <button type="submit" class="btn btn-editar">Editar</button>
+                        </form>
+                        <form asp-action="Excluir" method="post" onsubmit="return confirm('Excluir este livro?');">
+                            @Html.AntiForgeryToken()
+
+                            <input type="hidden" name="id" value="@l.Id" />
+                            <button type="submit" class="btn btn-excluir">Excluir</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table> 
+<br />
+<br />
+<a asp-action="Criar" class="btnLink">Adicionar livro</a>

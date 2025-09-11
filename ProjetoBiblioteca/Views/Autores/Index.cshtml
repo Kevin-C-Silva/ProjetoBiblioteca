@@ -1,0 +1,41 @@
+﻿@model IEnumerable<ProjetoBiblioteca.Models.Autores>
+
+<link href="~/css/listas.css" rel="stylesheet" />
+
+<h2>Autores</h2>
+<table class="tbl">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Criado em</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var autor in Model)
+        {
+            <tr>
+                <td>@autor.Nome</td>
+                <td>@autor.CriadoEm</td>
+                <td>
+                    <div class="acoes">
+                        <form asp-action="Editar" method="get">
+                            <input type="hidden" name="id" value="@autor.Id" />
+                            <button type="submit" class="btn btn-editar">Editar</button>
+                        </form>
+
+                        <form asp-action="Excluir" method="post" onsubmit="return confirm('Excluir este autor?');">
+                            @Html.AntiForgeryToken()
+
+                            <input type="hidden" name="id" value="@autor.Id" />
+                            <button type="submit" class="btn btn-excluir">Excluir</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<br />
+<br />
+<a asp-action="Criar" class="btnLink">Adicionar autor</a>

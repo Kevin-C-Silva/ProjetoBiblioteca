@@ -1,0 +1,94 @@
+﻿@using ProjetoBiblioteca.Autenticacao
+@{
+    var isLogged = Context.Session.GetInt32(SessionKeys.UserId).HasValue;
+    var role = Context.Session.GetString(SessionKeys.UserRole);
+    var userName = Context.Session.GetString(SessionKeys.UserName);
+}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Biblioteca</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/ProjetoBiblioteca.styles.css" asp-append-version="true" />
+    @RenderSection("Styles", required: false)
+    <style>
+        /* estilos básicos opcionais (caso não esteja usando site.css) */
+        body {
+            font-family: system-ui,Segoe UI,Roboto,Arial,sans-serif;
+            margin: 0;
+        }
+
+        .topnav {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            padding: 10px 16px;
+            border-bottom: 1px solid #eee;
+            background: #fff;
+            position: sticky;
+            top: 0;
+        }
+            .topnav a {
+                text-decoration: none;
+                color: #111;
+            }
+
+        .spacer {
+            flex: 1;
+        }
+
+        .btn-link {
+            background: none;
+            border: 1px solid #2563eb;
+            color: #2563eb;
+            border-radius: 4px;
+            padding: 6px 10px;
+            cursor: pointer;
+        }
+            .btn-link:hover {
+                background: #e6f0ff;
+            }
+
+        .container {
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        @if (isLogged)
+        {
+            <nav class="topnav">
+                <a class="linkPag" asp-controller="Home" asp-action="Index">Home</a>
+                <a class="linkPag" asp-controller="Livros" asp-action="Index">Livros</a>
+                <a class="linkPag" asp-controller="Autores" asp-action="Index">Autores</a>
+                <a class="linkPag" asp-controller="Editoras" asp-action="Index">Editoras</a>
+                <a class="linkPag" asp-controller="Generos" asp-action="Index">Gêneros</a>
+
+                @* Somente Admin vê Usuários *@ 
+                @if (role == "Admin")
+                {
+                    <a class="linkPag" asp-controller="Usuarios" asp-action="Index">Usuários</a>
+                }
+
+                <span class="spacer"></span>
+                <span>@userName</span>
+
+                <form asp-controller="Auth" asp-action="Logout" method="post" style="display:inline">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn-link">Sair</button>
+                </form>
+            </nav>
+        }
+    </header>
+
+    <main role="main" class="container">
+        @RenderBody()
+    </main>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

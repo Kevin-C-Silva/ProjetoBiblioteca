@@ -1,0 +1,15 @@
+﻿@model ProjetoBiblioteca.Models.Generos
+
+<h2>Cadastrar Gênero</h2>
+<link href="~/css/cadastro.css" rel="stylesheet" />
+
+<form asp-action="Criar" method="post">
+    @Html.AntiForgeryToken()
+    <section>
+        <div>
+            <label>Nome</label>
+            <input asp-for="Nome" required />
+        </div>
+    </section>
+    <button type="submit" class="btn btn-primary">Salvar</button>
+</form>

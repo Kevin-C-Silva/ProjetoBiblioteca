@@ -1,0 +1,10 @@
+﻿@using ProjetoBiblioteca.Autenticacao
+
+@{
+    var userName = Context.Session.GetString(SessionKeys.UserName);
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Bem-Vindo, @userName!</h1>
+</div>
