@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MySql.Data.MySqlClient;
+using ProjetoBiblioteca.Autenticacao;
 using ProjetoBiblioteca.Data;
 using ProjetoBiblioteca.Models;
 
 namespace ProjetoBiblioteca.Controllers
 {
+    [SessionAuthorize]
     public class AutoresController : Controller
     {
         private readonly Database db = new Database();
@@ -36,6 +38,25 @@ namespace ProjetoBiblioteca.Controllers
 
         [HttpPost]
         public IActionResult Criar(Autores vm)
+        {
+            using var conn = db.GetConnection();
+            using var cmd = new MySqlCommand("sp_autor_criar", conn);
+
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("p_nome", vm.Nome);
+            cmd.ExecuteNonQuery();
+
+            return RedirectToAction("Criar");
+        }
+
+
+        public IActionResult Editar()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Editar(Autores vm)
         {
             using var conn = db.GetConnection();
             using var cmd = new MySqlCommand("sp_autor_criar", conn);

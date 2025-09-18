@@ -10,7 +10,7 @@ namespace ProjetoBiblioteca.Models
         public int? EditoraId { get; set; }
         public int? GeneroId { get; set; }
         public short? Ano { get; set; }
-        public string? Isbn { get; set; }
+        public string? Isbn { get; set; } // Número de registro do livro (como um cpf do livro)
         public int QuantidadeTotal { get; set; }
         public int QuantidadeDisponivel { get; set; }
         public DateTime CriadoEm { get; set; }

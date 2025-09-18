@@ -12,9 +12,9 @@
         </tr>
     </thead>
     <tbody>
-        <tr>
             @foreach (var editora in Model)
             {
+            <tr>
                 <td>@editora.Nome</td>
                 <td>@editora.CriadoEm</td>
                 <td>
@@ -32,8 +32,8 @@
                         </form>
                     </div>
                 </td>
+            </tr>
             }
-        </tr>
     </tbody>
 </table>
 <br />
