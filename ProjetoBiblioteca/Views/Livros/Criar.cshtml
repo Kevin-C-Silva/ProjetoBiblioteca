@@ -46,6 +46,12 @@
             <label>ISBN</label>
             <input asp-for="Isbn" />
         </div>
+        <div>
+            <label>Capa do livro</label>
+            <input type="file" name="capa" accept="image/*" id="img" style="display:none;"/>
+            <label for="img">Escolha um arquivo.</label>
+            <small> Formatos comuns: JPG/PNG. Tamanho moderado.</small>
+        </div>
 
         <div>
             <label>Quantidade total</label>

@@ -1,11 +1,12 @@
 ﻿/* Tabela base */
 .tbl {
     width: 100%;
-    border-collapse: collapse;    
+    border-collapse: collapse;
     table-layout: auto;
     margin: 30px 0px;
     display: inline;
 }
+
     .tbl th, .tbl td {
         padding: 8px 12px;
         border-bottom: 1px solid #e6e6e6;
@@ -16,7 +17,7 @@
 
     .tbl thead th {
         border-bottom: 2px solid #d0d0d0;
-        font-weight: 600;        
+        font-weight: 600;
     }
 
     .tbl tbody tr:nth-child(even) {
@@ -39,6 +40,7 @@
     align-items: center;
     justify-content: center;
 }
+
     .acoes form {
         margin: 0;
     }

@@ -122,10 +122,11 @@ create procedure sp_livro_criar (
     in p_genero int,
     in p_ano smallint,
     in p_isbn varchar(32),
+    in p_capa_arquivo varchar(255),
     in p_quantidade int)
 begin
-	insert into Livros(titulo, autorId, editoraId, generoId, ano, isbn, quantidade_total, quantidade_disponivel)
-				values(p_titulo, p_autor, p_editora, p_genero, p_ano, p_isbn, p_quantidade, p_quantidade);
+	insert into Livros(titulo, autorId, editoraId, generoId, ano, isbn, capa_arquivo, quantidade_total, quantidade_disponivel)
+				values(p_titulo, p_autor, p_editora, p_genero, p_ano, p_isbn, p_capa_arquivo, p_quantidade, p_quantidade);
 end; $$
 
 delimiter $$
@@ -143,6 +144,7 @@ begin
         g.nome as genero_nome,
         l.ano,
         l.isbn,
+        l.capa_arquivo,
         l.quantidade_total,
         l.quantidade_disponivel,
         l.criado_em
@@ -212,3 +214,41 @@ create procedure sp_livro_excluir (in p_id int)
 begin
 	delete from Livros where id = p_id;
 end $$
+
+alter table Livros add column capa_arquivo varchar(255) null after isbn;
+
+create table Bibliotecarios(
+	id int primary key,
+    matricula varchar(30) unique null,
+    criado_em datetime null default current_timestamp
+);
+
+create table Leitor(
+	id int primary key auto_increment,
+    id_emprestimo int not null,
+    id_livro int not null,
+    quantidade int not null default 1,
+    data_devolucao_item datetime null
+);
+
+create table Emprestimos(
+	id int primary key auto_increment,
+    id_leitor int not null,
+    id_bibliotecario int not null,
+    data_emprestimo datetime not null default current_timestamp,
+    data_prevista_devolucao date not null,
+    data_devolucao_geral datetime not null,
+    status ENUM('Ativo','Finalizado','Parcial') not null default 'Ativo'
+);
+
+create table Emprestimo_itens(
+	id int primary key auto_increment,
+    id_emprestimo int not null,
+    id_livro int not null,
+    quantidade int not null default 1,
+    data_devolucao_item datetime null
+);
+
+alter table Emprestimo_itens
+	add constraint fk_itens_emp foreign key (id_emprestimo) references Emprestimos(id),
+    add constraint fk_itens_livro foreign key (id_livro) references Livros(id),

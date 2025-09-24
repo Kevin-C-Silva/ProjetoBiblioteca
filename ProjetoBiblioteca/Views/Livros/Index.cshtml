@@ -27,6 +27,7 @@
             <th>Gênero</th>
             <th>Ano</th>
             <th>ISBN</th>
+            <th>Capa</th>
             <th>Total</th>
             <th>Disp.</th>
             <th class="col-acoes">Ações</th>
@@ -43,6 +44,7 @@
                 <td>@(l.Genero ?? "-")</td>
                 <td>@(l.Ano?.ToString() ?? "-")</td>
                 <td>@(string.IsNullOrWhiteSpace(l.Isbn) ? "-" : l.Isbn)</td>
+                <td>@(l.Capa_Arquivo ?? "-")</td>
                 <td>@l.QuantidadeTotal</td>
                 <td>@l.QuantidadeDisponivel</td>
                 <td>
@@ -62,7 +64,7 @@
             </tr>
         }
     </tbody>
-</table> 
+</table>
 <br />
 <br />
 <a asp-action="Criar" class="btnLink">Adicionar livro</a>

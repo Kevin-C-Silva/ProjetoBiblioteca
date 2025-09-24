@@ -52,11 +52,25 @@ namespace ProjetoBiblioteca.Controllers
         }
 
         [HttpPost, ValidateAntiForgeryToken]
-        public IActionResult Criar(Livros vm)
+        public IActionResult Criar(Livros vm, IFormFile? capa)
         {
+            string? relPath = null;
+
             if (string.IsNullOrWhiteSpace(vm.Titulo) || vm.QuantidadeTotal < 1)
             {
                 ModelState.AddModelError("", "Informe titulo e uma quantidade total válida (>-1).");
+            }
+
+            if(capa != null && capa.Length > 0)
+            {
+                var ext = Path.GetExtension(capa.FileName);
+                var fileName = $"{Guid.NewGuid()}{ext}";
+                var saveDir = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "capas");
+                Directory.CreateDirectory(saveDir);
+                var absPath = Path.Combine(saveDir, fileName);
+                using var fs = new FileStream(absPath, FileMode.Create);
+                capa.CopyTo(fs);
+                relPath = Path.Combine("capas", fileName).Replace("\\", "/"); // Caminho relativo para src="~/"
             }
 
             using var conn2 = db.GetConnection();
@@ -67,6 +81,7 @@ namespace ProjetoBiblioteca.Controllers
             cmd.Parameters.AddWithValue("p_genero", (object?)vm.GeneroId ?? DBNull.Value);
             cmd.Parameters.AddWithValue("p_ano", (object?)vm.Ano ?? DBNull.Value);
             cmd.Parameters.AddWithValue("p_isbn", (object?)vm.Isbn ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("p_capa_arquivo", (object?)relPath ?? DBNull.Value);
             cmd.Parameters.AddWithValue("p_quantidade", vm.QuantidadeTotal);
             cmd.ExecuteNonQuery();
 
@@ -159,5 +174,21 @@ namespace ProjetoBiblioteca.Controllers
             return list;
         }
 
+        public IActionResult Excluir(int id)
+        {
+            using var conn = db.GetConnection();
+            try
+            {
+                using var cmd = new MySqlCommand("sp_livro_excluir", conn) { CommandType = CommandType.StoredProcedure };
+                cmd.Parameters.AddWithValue("p_id", id);
+                cmd.ExecuteNonQuery();
+                TempData["ok"] = "Livro excluído!";
+            }
+            catch (MySqlException ex)
+            {
+                TempData["ok"] = ex.Message;
+            }
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

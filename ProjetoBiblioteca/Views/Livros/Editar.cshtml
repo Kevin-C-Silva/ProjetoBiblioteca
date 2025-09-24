@@ -9,7 +9,6 @@
 </div>
 <link href="~/css/cadastro.css" rel="stylesheet" />
 
-<div class="card">
     @if (!ViewData.ModelState.IsValid)
     {
         <div class="validation">
@@ -24,7 +23,7 @@
         @Html.AntiForgeryToken()
         <input type="hidden" asp-for="Id" />
 
-        <section>
+        <section class="cad">
             <div>
                 <label>Título</label>
                 <input asp-for="Titulo" class="input" required />
@@ -61,16 +60,20 @@
                 <input asp-for="Isbn" class="input" />
             </div>
 
+        <div>
+            <label>Capa do livro</label>
+            <input type="file" name="capa" accept="image/*" id="img" style="display:none;" />
+            <label for="img" style="font-weight:normal; border: 1px solid black; background-color:lightgray;" title="Formatos comuns: JPG/PNG. Tamanho moderado.">Escolher Arquivo</label>
+        </div>
+
             <div>
                 <label>Quantidade total</label>
                 <input asp-for="QuantidadeTotal" type="number" min="1" class="input" required />
             </div>
         </section>
 
-        <div>
-            <a asp-action="Index" class="btn btn-light">Cancelar</a>
+        <div class="dBtn" style="max-width:fit-content; display: flex; flex-direction:row; justify-content:center;">
+            <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
             <button type="submit" class="btn btn-primary">Salvar</button>
         </div>
     </form>
-</div>
-
