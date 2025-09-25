@@ -33,6 +33,7 @@ namespace ProjetoBiblioteca.Controllers
                     Genero = rd["genero_nome"] as string,
                     Ano = rd["ano"] == DBNull.Value ? null : (short?)rd.GetInt16("ano"),
                     Isbn = rd["isbn"] as string,
+                    Capa_Arquivo = rd["capa_arquivo"] as string, // Capa_Arquivo = rd["capa_arquivo"] == DBNull.Value ? null : (string?)rd.GetString("capa_arquivo"),
                     QuantidadeTotal = rd.GetInt32("quantidade_total"),
                     QuantidadeDisponivel = rd.GetInt32("quantidade_disponivel"),
                     CriadoEm = rd.GetDateTime("criado_em")
@@ -110,6 +111,7 @@ namespace ProjetoBiblioteca.Controllers
                         GeneroId = rd["generoId"] == DBNull.Value ? null : (int?)rd.GetInt32("generoId"),
                         Ano = rd["ano"] == DBNull.Value ? null : (short?)rd.GetInt16("ano"),
                         Isbn = rd["isbn"] as string,
+                        Capa_Arquivo = rd["capa_arquivo"] as string, // Capa_Arquivo = rd["capa_arquivo"] == DBNull.Value ? null : (string?)rd.GetString("capa_arquivo"),
                         QuantidadeTotal = rd.GetInt32("quantidade_total")
                     };
                 }
@@ -125,6 +127,8 @@ namespace ProjetoBiblioteca.Controllers
         [HttpPost, ValidateAntiForgeryToken]
         public IActionResult Editar(Livros model)
         {
+            string? relPath = null;
+
             if (model.Id <= 0) return NotFound();
             if(string.IsNullOrWhiteSpace(model.Titulo) || model.QuantidadeTotal < 1)
             {
@@ -140,6 +144,7 @@ namespace ProjetoBiblioteca.Controllers
             cmd.Parameters.AddWithValue("p_genero", model.GeneroId ?? (object)DBNull.Value);
             cmd.Parameters.AddWithValue("p_ano", model.Ano ?? (object)DBNull.Value);
             cmd.Parameters.AddWithValue("p_isbn", (object?)model.Isbn ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("p_capa_arquivo", (object?)relPath ?? DBNull.Value);
             cmd.Parameters.AddWithValue("p_novo_total", model.QuantidadeTotal);
             cmd.ExecuteNonQuery();
 

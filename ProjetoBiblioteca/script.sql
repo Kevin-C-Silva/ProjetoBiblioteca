@@ -18,11 +18,12 @@ create procedure sp_usuario_criar (
     in p_nome varchar(100),
     in p_email varchar(100),
     in p_senha_hash varchar(255),
+    in p_imagem varchar(255),
     in p_role varchar(20) 
 )
 begin
-    insert into Usuarios (nome, email, senha_Hash, role, ativo, criado_em)
-    values (p_nome, p_email, p_senha_hash, p_role, 1, NOW());
+    insert into Usuarios (nome, email, senha_Hash, imagem, role, ativo, criado_em)
+    values (p_nome, p_email, p_senha_hash, p_imagem, p_role, 1, NOW());
 end $$
 
 call sp_usuario_criar(
@@ -174,7 +175,7 @@ delimiter $$
 drop procedure if exists sp_genero_editar $$
 create procedure sp_genero_editar(in p_nome varchar(100))
 begin
-	insert into Generos (nome, criado_em) values (p_nome, NOW());
+	update Generos set nome = p_nome where id = p_id;
 end;
 $$
 
@@ -182,7 +183,7 @@ delimiter $$
 drop procedure if exists sp_autor_editar $$
 create procedure sp_autor_editar(in p_nome varchar(150))
 begin
-	insert into Autores (nome, criado_em) values (p_nome, NOW());
+	update Autores set nome = p_nome where id = p_id;
 end;
 $$
 
@@ -262,4 +263,18 @@ alter table Emprestimo_itens
 	add constraint fk_itens_emp foreign key (id_emprestimo) references Emprestimos(id),
     add constraint fk_itens_livro foreign key (id_livro) references Livros(id);
     
-delimiter
+alter table Usuarios add column imagem varchar(255) after senha_hash;
+
+delimiter $$
+drop procedure if exists sp_usuario_listar $$
+create procedure sp_usuario_editar (in p_nome varchar(100), in p_email varchar(100), in p_senha varchar(255), p_role varchar(20), p_ativo tinyint(1))
+begin
+	select distinct nome, email, role, ativo, criado_Em from Usuarios order by nome;
+end $$
+
+delimiter $$
+drop procedure if exists sp_usuario_editar $$
+create procedure sp_usuario_editar (in p_nome varchar(100), in p_email varchar(100), in p_senha varchar(255), p_role varchar(20), p_ativo tinyint(1))
+begin
+	update Usuarios set nome = p_nome, email = p_email, senha_hash = p_senha;
+end $$
