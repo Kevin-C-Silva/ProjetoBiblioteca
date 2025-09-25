@@ -11,8 +11,7 @@
 <link href="~/css/cadastro.css" rel="stylesheet" />
 
 
-<form asp-action="Criar" method="post">
-
+<form asp-action="Criar" method="post" enctype="multipart/form-data">
     @Html.AntiForgeryToken()
     <section>
         <div>

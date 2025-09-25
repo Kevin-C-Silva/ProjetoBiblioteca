@@ -19,7 +19,7 @@
         </div>
     }
 
-    <form asp-action="Editar" method="post" class="form">
+    <form asp-action="Editar" method="post" enctype="multipart/form-data">
         @Html.AntiForgeryToken()
         <input type="hidden" asp-for="Id" />
 

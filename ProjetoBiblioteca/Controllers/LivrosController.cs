@@ -141,6 +141,8 @@ namespace ProjetoBiblioteca.Controllers
             cmd.Parameters.AddWithValue("p_ano", model.Ano ?? (object)DBNull.Value);
             cmd.Parameters.AddWithValue("p_isbn", (object?)model.Isbn ?? DBNull.Value);
             cmd.Parameters.AddWithValue("p_novo_total", model.QuantidadeTotal);
+            cmd.ExecuteNonQuery();
+
             return RedirectToAction(nameof(Index));
         }
         private readonly Database db = new Database();

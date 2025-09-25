@@ -1,4 +1,4 @@
-drop database if exists bdBiblioteca;
+-- drop database if exists bdBiblioteca;
 create database bdBiblioteca;
 use bdBiblioteca;
 
@@ -204,7 +204,7 @@ begin
     from Livros where id = p_id for update;
     
     update Livros
-		set titulo = p_titulo, autor = p_autor, editora = p_editora, genero = p_genero, ano = p_ano, isbn = p_isbn, quantidade_total = p_novo_total, 
+		set titulo = p_titulo, autorId = p_autor, editoraId = p_editora, generoId = p_genero, ano = p_ano, isbn = p_isbn, quantidade_total = p_novo_total, 
         quantidade_disponivel = greatest(0, least(p_novo_total, v_disp + (p_novo_total - v_total))) where id = p_id;
 end $$
 
@@ -223,7 +223,7 @@ create table Bibliotecarios(
     criado_em datetime null default current_timestamp
 );
 
-create table Leitor(
+create table Leitores(
 	id int primary key auto_increment,
     id_emprestimo int not null,
     id_livro int not null,
@@ -249,6 +249,17 @@ create table Emprestimo_itens(
     data_devolucao_item datetime null
 );
 
+alter table Livros
+	add constraint fk_livros_autor foreign key (autorId) references Autores(id),
+    add constraint fk_livros_editora foreign key (editoraId) references Editoras(id),
+    add constraint fk_livros_genero foreign key (generoId) references Generos(id);
+    
+alter table Emprestimos
+	add constraint fk_leitor_emp foreign key (id_leitor) references Leitores(id),
+    add constraint fk_empr_bibli foreign key (id_bibliotecario) references Usuarios(id);
+	
 alter table Emprestimo_itens
 	add constraint fk_itens_emp foreign key (id_emprestimo) references Emprestimos(id),
-    add constraint fk_itens_livro foreign key (id_livro) references Livros(id),
+    add constraint fk_itens_livro foreign key (id_livro) references Livros(id);
+    
+delimiter
