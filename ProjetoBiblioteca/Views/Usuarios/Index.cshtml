@@ -10,6 +10,7 @@
 <table class="tbl">
     <thead>
         <tr>
+            <th>Imagem</th>
             <th>Nome</th>
             <th>Email</th>
             <th>Função</th>
@@ -22,6 +23,13 @@
         @foreach (var usuario in Model)
         {
             <tr>
+                <td style="display: none"><input type="hidden" value="@usuario.Id"/></td>
+                
+                @if (!(usuario.Imagem == null)){<td><img style="min-width: 50px; min-height: 50px; background-color: lightgray; opacity: 0.75; border: 1px solid black; border-radius: 10px;" src="@usuario.Imagem" alt="Nada" /></td>}
+                else
+                {
+                    <td><p style="margin: 0 auto; text-align: center;">Nada</p></td>
+                }                
                 <td>@usuario.Nome</td>
                 <td>@usuario.Email</td>
                 <td>@usuario.Role</td>

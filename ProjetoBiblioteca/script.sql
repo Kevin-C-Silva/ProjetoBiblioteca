@@ -274,7 +274,30 @@ end $$
 
 delimiter $$
 drop procedure if exists sp_usuario_editar $$
-create procedure sp_usuario_editar (in p_nome varchar(100), in p_email varchar(100), in p_senha varchar(255), p_role varchar(20), p_ativo tinyint(1))
+create procedure sp_usuario_editar (in p_nome varchar(100), in p_email varchar(100), in p_senha varchar(100), p_imagem varchar(255) p_role varchar(20), p_ativo tinyint(1))
 begin
 	update Usuarios set nome = p_nome, email = p_email, senha_hash = p_senha;
+end $$
+
+delimiter $$
+drop procedure if exists sp_usuario_listar $$
+create procedure sp_usuario_listar ()
+begin
+	select distinct nome, email, imagem, role, ativo, criado_Em from Usuarios order by nome;
+end $$
+
+delimiter $$
+drop procedure if exists sp_usuario_obter $$
+create procedure sp_usuario_obter (in p_id varchar(100))
+begin
+	select distinct nome, email, imagem, role, ativo from Usuarios where id = p_id;
+end $$
+delimiter $$
+drop procedure if exists sp_vitrine_buscar $$
+create procedure sp_vitrine_buscar (in p_q varchar(200))
+begin
+	select l.id, l.titulo, l.autorId, l.editoraId, l.generoId, l.ano, l.isbn, 
+    l.capa_arquivo, l.quantidade_total, l.quantidade_disponivel from Livros l
+    where l.quantidade_disponivel > 0 and (p_q is null or p_q = '' or l.titulo like concat('%', p_q, '%'))
+    order by l.titulo;
 end $$
